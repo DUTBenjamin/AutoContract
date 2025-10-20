@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AC·Sys</title>
+    <style>
+        /* 重置默认样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 整体页面样式 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏样式 */
+        .navbar {
+            background-color: #f4f4f4;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        /* 欢迎区域样式 */
+        .welcome {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        /* 侧边栏和主要内容区域整体布局 */
+        .content {
+            display: flex;
+            flex: 1;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 20%;
+            background-color: #f4f4f4;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar h3 {
+            font-size: 2.2em;
+            text-align: center;
+        }
+
+        .sidebar p {
+            margin-bottom: 80px;
+            padding: 0;
+            margin-top: 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 30px;
+            font-size: 1.3em;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        /* 主要内容区域样式 */
+        .main-content {
+            width: 80%;
+            padding: 20px;
+        }
+
+        /* 合同表单样式 */
+        .contract-form {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-submit {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* 进度条样式 */
+        .progress-container {
+            width: 100%;
+            height: 30px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #007BFF;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* 状态消息样式 */
+        .status-message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="navbar">
+        <a href="{% url 'index:index' %}">AC Sys</a>
+        <a href="{% url 'guide' %}">首页导航</a>
+        <a href="{% url 'generate:generate' %}">合同生成</a>
+        <a href="{% url 'download' %}">合同下载</a>
+        <a href="{% url 'word' %}">使用文档</a>
+        <a href="{% url 'aboutus' %}">关于我们</a>
+    </div>
+    <!-- 欢迎区域 -->
+    <div class="welcome">
+        <h1>欢迎使用技术合同智能生成系统！</h1>
+        <p>Welcome to AC·Sys!</p>
+    </div>
+    <!-- 侧边栏和主要内容区域 -->
+    <div class="content">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <h3>AC·Sys</h3>
+            <p></p>
+            <ul>
+                <li><a href="{% url 'index:index' %}">首页</a></li>
+                <li><a href="{% url 'generate:generate' %}">合同生成</a></li>
+                <li><a href="{% url 'download' %}">合同下载</a></li>
+                <li><a href="{% url 'word' %}">使用文档</a></li>
+                <li><a href="{% url 'aboutus' %}">关于我们</a></li>
+            </ul>
+        </div>
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <form class="contract-form" id="contractForm">
+                <h2>填写合同信息</h2>
+                <div class="form-group">
+                    <label for="q1">许可方与被许可方名称（用逗号分隔）</label>
+                    <input type="text" id="q1" name="q1">
+                </div>
+                <div class="form-group">
+                    <label for="q2">合同签订日期与有效期（格式：YYYY - MM - DD，用逗号分隔）</label>
+                    <input type="text" id="q2" name="q2">
+                </div>
+                <div class="form-group">
+                    <label for="q3">许可专利确定方式（1.指明具体发明创造 2.附件二所列明）</label>
+                    <input type="text" id="q3" name="q3" onchange="togglePatentDetails(this.value)">
+                </div>
+                <div class="form-group" id="specific-patent" style="display: none;">
+                    <label for="q4">若选择指明具体发明创造，许可专利发明创造名称与申请号（用逗号分隔）</label>
+                    <input type="text" id="q4" name="q4">
+                </div>
+                <div class="form-group">
+                    <label for="q5">许可方式（普通/排他/独占）、许可期限、许可区域（用逗号分隔）</label>
+                    <input type="text" id="q5" name="q5">
+                </div>
+                <div class="form-group">
+                    <label for="q6">许可费支付方式（1.固定费用 2.提成费用 3.其他）</label>
+                    <input type="text" id="q6" name="q6" onchange="toggleFeeDetails(this.value)">
+                </div>
+                <div class="form-group" id="fixed-fee" style="display: none;">
+                    <label for="q7">若为固定费用支付，固定费用金额、支付方式（一次性/分期），若分期请输入分期次数（用逗号分隔）</label>
+                    <input type="text" id="q7" name="q7">
+                </div>
+                <div class="form-group" id="royalty-fee" style="display: none;">
+                    <label for="q8">若为提成费用支付，提成计算依据（销售额/利润等）、提成比例（用逗号分隔）</label>
+                    <input type="text" id="q8" name="q8">
+                </div>
+                <div class="form-group">
+                    <label for="q9">技术资料交付方式（1.纸质邮寄 2.电子传输）、交付日期（格式：YYYY - MM - DD，用逗号分隔）</label>
+                    <input type="text" id="q9" name="q9">
+                </div>
+                <div class="form-group">
+                    <label for="q10">保密信息范围（1.专利相关技术 2.商业数据等）、保密期限（年，用逗号分隔）</label>
+                    <input type="text" id="q10" name="q10">
+                </div>
+                <div class="form-group">
+                    <label for="q11">双方对改进成果的处理方式（如共享/一方独有等）</label>
+                    <input type="text" id="q11" name="q11">
+                </div>
+                <div class="form-group">
+                    <label for="q12">分别输入许可方与被许可方的陈述与保证事项（用逗号分隔）</label>
+                    <input type="text" id="q12" name="q12">
+                </div>
+                <div class="form-group">
+                    <label for="q13">合同是否涉及技术进出口（是/否），若是请简要描述双方权利义务（用逗号分隔）</label>
+                    <input type="text" id="q13" name="q13">
+                </div>
+                <div class="form-group">
+                    <label for="q14">第三方侵权时双方处理方式（如各自应诉/一方主导等）</label>
+                    <input type="text" id="q14" name="q14">
+                </div>
+                <div class="form-group">
+                    <label for="q15">若专利无效，关于答辩及费用承担方、许可费返还方式、合同履行方式（用逗号分隔）</label>
+                    <input type="text" id="q15" name="q15">
+                </div>
+                <div class="form-group">
+                    <label for="q16">不可抗力通知额外内容、终止合同的持续天数（用逗号分隔）</label>
+                    <input type="text" id="q16" name="q16">
+                </div>
+                <div class="form-group">
+                    <label for="q17">分别输入许可方与被许可方违约时的违约金情况（用逗号分隔）</label>
+                    <input type="text" id="q17" name="q17">
+                </div>
+                <div class="form-group">
+                    <label for="q18">税费承担方、合同适用法律（如中国法律/其他，请描述）（用逗号分隔）</label>
+                    <input type="text" id="q18" name="q18">
+                </div>
+                <div class="form-group">
+                    <label for="q19">争议解决方式（诉讼/仲裁），并输入对应管辖法院或仲裁委员会（用逗号分隔）</label>
+                    <input type="text" id="q19" name="q19">
+                </div>
+                <div class="form-group">
+                    <label for="q20">合同生效时间（签字盖章日/其他，请描述）、合同一式份数、双方各持份数（用逗号分隔）</label>
+                    <input type="text" id="q20" name="q20">
+                </div>
+                <button type="submit" class="form-submit">生成合同</button>
+            </form>
+
+            <!-- 进度条 -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">处理中... 0%</div>
+            </div>
+
+            <!-- 状态消息 -->
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // 存储进度检查定时器
+        let progressCheckInterval = null;
+        let currentProgress = 0;
+
+        // 获取DOM元素
+        const contractForm = document.getElementById('contractForm');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const statusMessage = document.getElementById('statusMessage');
+
+        // 根据选择切换专利详情显示
+        function togglePatentDetails(value) {
+            const specificPatent = document.getElementById('specific-patent');
+            if (value === '1') {
+                specificPatent.style.display = 'block';
+            } else {
+                specificPatent.style.display = 'none';
+            }
+        }
+
+        // 根据选择切换费用详情显示
+        function toggleFeeDetails(value) {
+            const fixedFee = document.getElementById('fixed-fee');
+            const royaltyFee = document.getElementById('royalty-fee');
+            if (value === '1') {
+                fixedFee.style.display = 'block';
+                royaltyFee.style.display = 'none';
+            } else if (value === '2') {
+                fixedFee.style.display = 'none';
+                royaltyFee.style.display = 'block';
+            } else {
+                fixedFee.style.display = 'none';
+                royaltyFee.style.display = 'none';
+            }
+        }
+
+        // 显示状态消息
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.style.display = 'block';
+            statusMessage.className = `status-message ${isError ? 'error' : 'success'}`;
+        }
+
+        // 更新进度条
+        function updateProgress(percent) {
+            progressBar.style.width = `${percent}%`;
+            progressText.textContent = `处理中... ${Math.round(percent)}%`;
+        }
+
+        // 检查进度
+        function checkProgress() {
+            fetch('/generate/get-progress/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Progress data:', data);  // 调试日志
+
+                    // 如果实际进度大于当前进度，使用实际进度
+                    if (data.progress > currentProgress) {
+                        currentProgress = data.progress;
+                    }
+                    // 否则每次增加固定进度
+                    else if (currentProgress < 90) {
+                        currentProgress += 1; // 每次增加5%
+                    }
+
+                    // 更新进度条
+                    updateProgress(currentProgress);
+
+                    // 更新状态消息
+                    if (data.status) {
+                        progressText.textContent = data.status;
+                    }
+
+                    // 如果生成完成
+                    if (data.completed && data.progress === 100) {
+                        console.log('Generation completed');  // 调试日志
+                        stopProgressCheck();
+
+                        // 确保进度条达到100%
+                        updateProgress(100);
+
+                        showStatus('合同生成成功！', false);
+
+                        // 添加下载按钮
+                        const downloadButton = document.createElement('button');
+                        downloadButton.className = 'form-submit';
+                        downloadButton.style.marginTop = '10px';
+                        downloadButton.textContent = '下载合同';
+                        downloadButton.onclick = function() {
+                            window.location.href = '/download/download/';
+                        };
+                        statusMessage.appendChild(document.createElement('br'));
+                        statusMessage.appendChild(downloadButton);
+
+                        setTimeout(() => {
+                            progressContainer.style.display = 'none';
+                        }, 2000);
+                    }
+                })
+                .catch(error => {
+                    console.error('检查进度时出错:', error);
+                    showStatus('检查进度时出错，请刷新页面重试', true);
+                    stopProgressCheck();
+                });
+        }
+
+        // 开始检查进度
+        function startProgressCheck() {
+            currentProgress = 0; // 重置进度
+            if (progressCheckInterval) {
+                clearInterval(progressCheckInterval);
+            }
+            // 每5秒增加5%
+            progressCheckInterval = setInterval(() => {
+                if (currentProgress < 90) {
+                    currentProgress += 1;
+                    updateProgress(currentProgress);
+                }
+            }, 10000);
+
+            // 立即开始检查进度
+            checkProgress();
+        }
+
+        // 停止检查进度
+        function stopProgressCheck() {
+            if (progressCheckInterval) {
+                clearInterval(progressCheckInterval);
+                progressCheckInterval = null;
+            }
+        }
+
+        // 表单提交事件
+        contractForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 立即显示进度条并开始更新
+            progressContainer.style.display = 'block';
+            updateProgress(0);
+            showStatus('正在准备生成合同...', false);
+            startProgressCheck(); // 立即开始刷新进度条
+
+            try {
+                // 收集表单数据并发送请求
+                const formData = new FormData(contractForm);
+                const questions = [];
+                const answers = [];
+
+                for (const [key, value] of formData.entries()) {
+                    const questionLabel = document.querySelector(`label[for="${key}"]`).textContent;
+                    questions.push(questionLabel);
+                    answers.push(value);
+                }
+
+                const response = await fetch('/generate/generate-draft/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ questions, answers })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    showStatus('开始生成合同，请稍候...', false);
+                } else {
+                    throw new Error(data.message || '生成合同失败');
+                }
+            } catch (error) {
+                console.error('提交表单时出错:', error);
+                showStatus(`提交失败: ${error.message}`, true);
+                progressContainer.style.display = 'none';
+                stopProgressCheck(); // 停止进度条刷新
+            }
+        });
+    </script>
+</body>
+
+</html>

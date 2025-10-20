@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AC·Sys - 开发者信息</title>
+    <style>
+        /* 重置默认样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 整体页面样式 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏样式 */
+        .navbar {
+            background-color: #f4f4f4;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        /* 欢迎区域样式 */
+        .welcome {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        /* 侧边栏和主要内容区域整体布局 */
+        .content {
+            display: flex;
+            flex: 1;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 20%;
+            background-color: #f4f4f4;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar h3 {
+            font-size: 2.2em;
+            text-align: center;
+        }
+
+        .sidebar p {
+            margin-bottom: 80px;
+            padding: 0;
+            margin-top: 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 30px;
+            font-size: 1.3em;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        /* 主要内容区域样式 */
+        .main-content {
+            width: 80%;
+            padding: 40px;
+        }
+
+        /* 开发者信息样式 */
+        .developer-info {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .developer-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .developer-card h3 {
+            color: #007BFF;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .contact-item i {
+            margin-right: 10px;
+            color: #007BFF;
+        }
+
+        .contact-item a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="navbar">
+        <a href="{% url 'index:index' %}">AC Sys</a>
+        <a href="{% url 'guide' %}">首页导航</a>
+        <a href="{% url 'generate:generate' %}">合同生成</a>
+        <a href="{% url 'download' %}">合同下载</a>
+        <a href="{% url 'word' %}">使用文档</a>
+        <a href="{% url 'aboutus' %}">关于我们</a>
+    </div>
+    <!-- 欢迎区域 -->
+    <div class="welcome">
+        <h1>欢迎使用技术合同智能生成系统！</h1>
+        <p>Welcome to AC·Sys!</p>
+    </div>
+    <!-- 侧边栏和主要内容区域 -->
+    <div class="content">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <h3>AC·Sys</h3>
+            <p></p>
+            <ul>
+                <li><a href="{% url 'index:index' %}">首页</a></li>
+                <li><a href="{% url 'generate:generate' %}">合同生成</a></li>
+                <li><a href="{% url 'download' %}">合同下载</a></li>
+                <li><a href="{% url 'word' %}">使用文档</a></li>
+                <li><a href="{% url 'aboutus' %}">关于我们</a></li>
+            </ul>
+        </div>
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <div class="developer-info">
+                <h2 style="margin-bottom: 30px; text-align: center;">开发者信息</h2>
+
+                <div class="developer-card">
+                    <h3>开发者1</h3>
+                    <div class="contact-item">
+                        <i>👤</i>
+                        <span>***</span>
+                    </div>
+                    <div class="contact-item">
+                        <i>✉️</i>
+                        <a href="https://mail.163.com/">18637571823@163.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i>🐱</i>
+                        <a href="https://github.com/DUTBenjamin" target="_blank">github.com/DUTBenjamin</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

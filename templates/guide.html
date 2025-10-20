@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专利实施许可合同智能生成系统</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', sans-serif; /* 更换为更适合中文显示的字体 */
+            margin: 0;
+            padding: 0;
+            /* 假设背景图片名为bg.jpg，根据实际情况修改 */
+            background-image: url('../static/images/guide.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+       .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.2); /* 调整半透明背景色 */
+            padding: 15px 30px; /* 调整内边距 */
+        }
+
+       .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s; /* 简化过渡效果写法 */
+        }
+
+       .navbar a:hover {
+            color: #e6e6e6; /* 调整鼠标悬停时文字颜色 */
+        }
+
+       .system-name {
+            text-align: center;
+            margin-top: 25vh; /* 调整垂直间距 */
+        }
+
+       .system-name h1 {
+            font-size: 120px; /* 调整主标题字号 */
+            letter-spacing: 2px; /* 增加主标题字母间距 */
+            margin-bottom: 15px;
+        }
+
+       .system-name h2 {
+            font-size: 70px; /* 调整副标题字号 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="{% url 'index:index' %}">技术合同智能生成系统</a>
+        <a href="{% url 'guide' %}">首页</a>
+        <a href="{% url 'generate:generate' %}">合同生成</a>
+        <a href="{% url 'download' %}">合同下载</a>
+        <a href="{% url 'word' %}">使用文档</a>
+        <a href="{% url 'aboutus' %}">关于我们</a>
+    </div>
+    <div class="system-name">
+        <h1>技术合同</h1>
+        <h2>智能生成系统</h2>
+    </div>
+</body>
+
+</html>
+

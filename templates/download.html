@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AC·Sys - 下载界面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #f4f4f4;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .welcome {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #f4f4f4;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar h3 {
+            font-size: 2.2em;
+            text-align: center;
+        }
+
+        .sidebar p {
+            margin-bottom: 80px;
+            padding: 0;
+            margin-top: 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 30px;
+            font-size: 1.3em;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .main-content {
+            width: 80%;
+            padding: 20px;
+        }
+
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .file-name {
+            font-size: 1.1em;
+            flex-grow: 1;
+        }
+
+        .file-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .download-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 20px;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+
+        .refresh-button {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .refresh-button:hover {
+            background-color: #218838;
+        }
+
+        .no-files {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="{% url 'index:index' %}">AC Sys</a>
+        <a href="{% url 'guide' %}">首页导航</a>
+        <a href="{% url 'generate:generate' %}">合同生成</a>
+        <a href="{% url 'download' %}">合同下载</a>
+        <a href="{% url 'word' %}">使用文档</a>
+        <a href="{% url 'aboutus' %}">关于我们</a>
+    </div>
+
+    <div class="welcome">
+        <h1>欢迎使用技术合同智能生成系统！</h1>
+        <p>Welcome to AC·Sys!</p>
+    </div>
+
+    <div class="content">
+        <div class="sidebar">
+            <h3>AC·Sys</h3>
+            <p></p>
+            <ul>
+                <li><a href="{% url 'index:index' %}">首页</a></li>
+                <li><a href="{% url 'generate:generate' %}">合同生成</a></li>
+                <li><a href="{% url 'download' %}">合同下载</a></li>
+                <li><a href="{% url 'word' %}">使用文档</a></li>
+                <li><a href="{% url 'aboutus' %}">关于我们</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <h2>已生成文件列表</h2>
+            <button class="refresh-button" onclick="refreshFileList()">刷新文件列表</button>
+            <ul id="file-list" class="file-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        // 获取文件列表
+        function getFileList() {
+            fetch("{% url 'get_contracts' %}")
+                .then(response => response.json())
+                .then(data => {
+                    const fileList = document.getElementById('file-list');
+                    fileList.innerHTML = ''; // 清空现有列表
+
+                    if (data.success && data.contracts.length > 0) {
+                        data.contracts.forEach(file => {
+                            const listItem = document.createElement('li');
+
+                            const fileInfo = document.createElement('div');
+                            fileInfo.className = 'file-info';
+
+                            const fileName = document.createElement('span');
+                            fileName.className = 'file-name';
+                            fileName.textContent = file.filename;
+
+                            const fileMeta = document.createElement('div');
+                            fileMeta.className = 'file-meta';
+
+                            const fileDate = document.createElement('span');
+                            fileDate.textContent = file.created_time;
+
+                            const fileSize = document.createElement('span');
+                            fileSize.textContent = file.size;
+
+                            fileMeta.appendChild(fileDate);
+                            fileMeta.appendChild(fileSize);
+
+                            fileInfo.appendChild(fileName);
+                            fileInfo.appendChild(fileMeta);
+
+                            const downloadButton = document.createElement('button');
+                            downloadButton.textContent = '下载';
+                            downloadButton.className = 'download-button';
+                            downloadButton.onclick = () => {
+                                window.location.href = `{% url 'download_contract' 'placeholder' %}`.replace('placeholder', file.filename);
+                            };
+
+                            listItem.appendChild(fileInfo);
+                            listItem.appendChild(downloadButton);
+                            fileList.appendChild(listItem);
+                        });
+                    } else {
+                        const noFiles = document.createElement('li');
+                        noFiles.className = 'no-files';
+                        noFiles.textContent = '暂无生成的文件';
+                        fileList.appendChild(noFiles);
+                    }
+                })
+                .catch(error => {
+                    console.error('获取文件列表失败:', error);
+                    alert('获取文件列表失败，请稍后重试');
+                });
+        }
+
+        // 刷新文件列表
+        function refreshFileList() {
+            getFileList();
+        }
+
+        // 页面加载时获取文件列表
+        document.addEventListener('DOMContentLoaded', getFileList);
+
+        // 定期刷新文件列表（每60秒）
+        setInterval(getFileList, 60000);
+    </script>
+</body>
+</html>

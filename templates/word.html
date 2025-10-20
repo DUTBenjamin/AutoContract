@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AC·Sys - 使用文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #f4f4f4;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .welcome {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .content {
+            flex: 1;
+            background-color: #fff;
+        }
+
+        .main-content {
+            width: 100%;
+            padding: 40px;
+            background-color: #fff;
+        }
+
+        /* 文档特定样式 */
+        .documentation {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .doc-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .doc-section h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .doc-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+        }
+
+        .doc-section p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .step-list {
+            list-style-type: none;
+            counter-reset: step-counter;
+        }
+
+        .step-list li {
+            position: relative;
+            padding: 15px 0 15px 45px;
+            counter-increment: step-counter;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .note-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007BFF;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tip-box {
+            background-color: #e8f4ff;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="{% url 'index:index' %}">AC Sys</a>
+        <a href="{% url 'guide' %}">首页导航</a>
+        <a href="{% url 'generate:generate' %}">合同生成</a>
+        <a href="{% url 'download' %}">合同下载</a>
+        <a href="{% url 'word' %}">使用文档</a>
+        <a href="{% url 'aboutus' %}">关于我们</a>
+    </div>
+
+    <div class="welcome">
+        <h1>欢迎使用技术合同智能生成系统！</h1>
+        <p>Welcome to AC·Sys!</p>
+    </div>
+
+    <div class="content">
+        <div class="main-content">
+            <div class="documentation">
+                <div class="doc-section">
+                    <h2>系统简介</h2>
+                    <p>AC·Sys是一个专业的技术合同智能生成系统，旨在帮助用户快速、准确地生成标准化的专利许可合同。本系统采用先进的智能算法，确保生成的合同文件既符合法律规范，又满足实际业务需求。</p>
+
+                    <div class="note-box">
+                        <strong>重要提示：</strong>
+                        <p>使用本系统生成的合同仅供参考，建议在正式使用前请专业法务人员审核。</p>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2>快速入门</h2>
+                    <ol class="step-list">
+                        <li>进入合同生成页面</li>
+                        <li>填写必要的合同信息</li>
+                        <li>确认信息并生成合同</li>
+                        <li>下载合同文件</li>
+                    </ol>
+                </div>
+
+                <div class="doc-section">
+                    <h2>功能详解</h2>
+                    <h3>1. 合同生成</h3>
+                    <p>支持多种类型的技术合同生成，包括独占许可、排他许可、普通许可等多种形式。系统会根据用户输入的具体情况，智能生成最适合的合同条款。</p>
+
+                    <h3>2. 个性定制</h3>
+                    <p>系统可以根据用户的个性化需求，结合用户填写的表单信息，智能定制用户所需要的合同文本。</p>
+
+                    <h3>3. 文件管理</h3>
+                    <p>系统会自动保存生成记录，方便后续查询和使用。</p>
+                </div>
+
+                <div class="doc-section">
+                    <h2>最佳实践</h2>
+                    <div class="tip-box">
+                        <h3>合同生成建议</h3>
+                        <p>1. 确保输入信息的准确性和完整性</p>
+                        <p>2. 使用系统提供的标准化术语</p>
+                        <p>3. 定期备份重要合同文件</p>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2>常见问题</h2>
+
+                    <h3>Q: 合同生成后可以导出什么格式？</h3>
+                    <p>A: 系统目前只支持导出Word格式，后续开发会引入更多导出格式。敬请期待......</p>
+
+                    <h3>Q: 如何确保合同的法律效力？</h3>
+                    <p>A: 系统生成的合同模板均经过专业法务团队审核，但建议在正式使用前由企业法务部门进行审核。</p>
+
+                    <h3>Q: 后续会有更多类型的合同生成方案吗？</h3>
+                    <p>A: 我们将根据用户需求和访问量，来决定后续是否支持生成更多种类的合同文本。</p>
+
+                    <h3>Q: 如何联系我们？</h3>
+                    <p>A: 点击“关于我们”获得更多信息。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
